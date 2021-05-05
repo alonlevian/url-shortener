@@ -18,7 +18,7 @@ router.post('/api/shorturl', async (req, res) => {
 
     dns.lookup(urlparser.parse(url).host.hostname, {}, async (error) => {
         if (error) {
-            return res.status(400).send({ error: 'invalid url' });
+            return res.send({ error: 'invalid url' });
         }
 
         const urlDocument = await Url.findOne({ original_url: url });

@@ -1,15 +1,9 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
 
 const urlSchema = new mongoose.Schema({
     original_url: {
         type: String,
-        required: true,
-        validate(value) {
-            if (!validator.isURL(value)) {
-                throw new Error({ error: 'invalid url' });
-            }
-        }
+        required: true
     },
     short_url: {
         type: Number,

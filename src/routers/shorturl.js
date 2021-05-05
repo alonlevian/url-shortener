@@ -1,4 +1,5 @@
 const express = require('express');
+const validator = require('validator');
 const Url = require('../models/url');
 const router = express.Router();
 
@@ -7,6 +8,10 @@ router.post('/api/shorturl', async (req, res) => {
     
     if (!url) {
         return res.status(400).send();
+    }
+
+    if (!validator.isURL(url)) {
+        return res.status(400).send({error: 'invalid url'});
     }
 
     const urlDocument = await Url.findOne({original_url: url});

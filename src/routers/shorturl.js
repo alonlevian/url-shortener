@@ -1,7 +1,9 @@
 const express = require('express');
 const dns = require('dns');
 const Url = require('../models/url');
+const validator = require('validator');
 const router = express.Router();
+const urlparser = require('urlparser');
 
 router.post('/api/shorturl', async (req, res) => {
     const url = req.body.url;
@@ -10,8 +12,11 @@ router.post('/api/shorturl', async (req, res) => {
         return res.status(400).send();
     }
 
-    dns.lookup(url, {}, async (error) => {
-        console.log(error);
+    if (!validator.isURL(url, {require_protocol: true})) {
+        return res.status(400).send({ error: 'invalid url' });
+    }
+
+    dns.lookup(urlparser.parse(url).host.hostname, {}, async (error) => {
         if (error) {
             return res.status(400).send({ error: 'invalid url' });
         }

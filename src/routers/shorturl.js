@@ -12,36 +12,30 @@ router.post('/api/shorturl', async (req, res) => {
         return res.status(400).send();
     }
 
-    if (!validator.isURL(url, {require_protocol: true})) {
-        return res.status(400).send({ error: 'invalid url' });
+    if (!validator.isURL(url, { require_protocol: true })) {
+        return res.status(400).send({ error: 'Invalid URL' });
     }
 
-    dns.lookup(urlparser.parse(url).host.hostname, {}, async (error) => {
-        if (error) {
-            return res.send({ error: 'invalid url' });
-        }
+    const urlDocument = await Url.findOne({ original_url: url });
 
-        const urlDocument = await Url.findOne({ original_url: url });
+    if (urlDocument) {
+        return res.send(urlDocument);
+    }
 
-        if (urlDocument) {
-            return res.send(urlDocument);
-        }
+    const lastDocumentNumber = await Url.getLastDocumentNumber();
 
-        const lastDocumentNumber = await Url.getLastDocumentNumber();
+    try {
+        const addedUrl = new Url({
+            original_url: url,
+            short_url: lastDocumentNumber + 1
+        });
 
-        try {
-            const addedUrl = new Url({
-                original_url: url,
-                short_url: lastDocumentNumber + 1
-            });
+        await addedUrl.save();
 
-            await addedUrl.save();
-
-            res.send(addedUrl);
-        } catch (error) {
-            res.status(500).send({ error });
-        }
-    });
+        res.send(addedUrl);
+    } catch (error) {
+        res.status(500).send({ error });
+    }
 });
 
 router.get('/api/shorturl/:short_url', async (req, res) => {

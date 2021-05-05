@@ -3,7 +3,7 @@ const cors = require('cors');
 const shorturlRouter = require('./routers/shorturl'); 
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://127.0.0.1:27017/short-urls', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb+srv://alon:alon@cluster0.5smcq.mongodb.net/short-urls?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 
 const app = express();
 

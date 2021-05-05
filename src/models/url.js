@@ -7,7 +7,7 @@ const urlSchema = new mongoose.Schema({
         required: true,
         validate(value) {
             if (!validator.isURL(value)) {
-                throw new Error("Not a valid url!");
+                throw new Error({ error: 'invalid url' });
             }
         }
     },

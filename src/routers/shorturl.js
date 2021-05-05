@@ -13,7 +13,7 @@ router.post('/api/shorturl', async (req, res) => {
     }
 
     if (!validator.isURL(url, { require_protocol: true })) {
-        return res.status(400).send({ error: 'Invalid URL' });
+        return res.send({ error: 'Invalid URL' });
     }
 
     const urlDocument = await Url.findOne({ original_url: url });

@@ -10,7 +10,7 @@ router.post('/api/shorturl', async (req, res) => {
         return res.status(400).send();
     }
 
-    if (!validator.isURL(url)) {
+    if (!validator.isURL(url, {require_protocol: true})) {
         return res.status(400).send({error: 'invalid url'});
     }
 

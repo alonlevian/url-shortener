@@ -40,7 +40,7 @@ router.get('/api/shorturl/:short_url', async (req, res) => {
         return res.status(404).send();
     }
 
-    res.send(url);
+    res.redirect(url.original_url);
 });
 
 module.exports = router;
